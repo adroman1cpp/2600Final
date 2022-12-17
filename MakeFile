@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -g -Wall -I/path/to/mqtt/include
-LDFLAGS = -L/path/to/mqtt/lib -lmqtt
+CFLAGS = -g -Wall -I/mqtt/include
+LDFLAGS = -L/mqtt/lib -lmqtt
 
 all: tic-tac-toe
 
