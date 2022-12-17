@@ -12,8 +12,10 @@
 #define ROWS 3
 #define COLUMNS 3
 
+//array for the grid
 char grid[ROWS][COLUMNS];
 
+//function that makes the grid
 void gameGrid()
 {
     int i, j;
@@ -26,6 +28,7 @@ void gameGrid()
     }
 }
 
+//function that prints the grid out
 void printGrid()
 {
     int i, j;
@@ -45,6 +48,7 @@ void printGrid()
     }
 }
 
+//function that checks to see if a player has won
 bool checkWin(char player)
 {
     // check rows
@@ -97,6 +101,7 @@ bool checkWin(char player)
     return false;
 }
 
+//checks for draw
 bool checkDraw()
 {
     int i, j;
@@ -113,6 +118,7 @@ bool checkDraw()
     return true;
 }
 
+//function for the player to choose their input
 void makeMove(int row, int column, char player)
 {
     if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS)
@@ -140,16 +146,19 @@ void makeMove(int row, int column, char player)
     }
 }
 
+//function that connects to mqtt
 void on_connect(struct mosquitto *mosq, void *obj, int result)
 {
     printf("Connected to MQTT server.\n");
 }
 
+//function that disconnects to mqtt
 void on_disconnect(struct mosquitto *mosq, void *obj, int result)
 {
     printf("Disconnected from MQTT server.\n");
 }
 
+//function that receives the message
 void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
     char *payload = message->payload;
@@ -158,6 +167,7 @@ void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_messag
     makeMove(row, column, 'O');
 }
 
+//function main where the game is played
 int main(int argc, char *argv[])
 {
     gameGrid();
@@ -173,6 +183,8 @@ int main(int argc, char *argv[])
 
     int row, column;
     char player = 'X';
+
+    //whule loop that gets input
     while (true)
     {
         printf("Player %c's turn. Enter row and column: ", player);
@@ -185,6 +197,7 @@ int main(int argc, char *argv[])
         mosquitto_publish(mosq, NULL, TOPIC, strlen(move), move, QOS, false);
     }
 
+    //disconnects from mosquitto
     mosquitto_disconnect(mosq);
     mosquitto_destroy(mosq);
     mosquitto_lib_cleanup();
