@@ -9,6 +9,6 @@ while true; do
     column=$((RANDOM % 3 + 1))
 
     # Make move
-    player2Move $row $column
+    playerMove $row $column
     
 done
