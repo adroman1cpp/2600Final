@@ -12,3 +12,4 @@ tic-tac-toe.o: tic-tac-toe.c
 
 clean:
     rm -f *.o tic-tac-toe
+    
