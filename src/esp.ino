@@ -7,7 +7,7 @@ const char *password = "Password";  // Enter WiFi password
 
 // MQTT Broker
 const char *mqtt_broker = "IP";  // Enter your WiFi or Ethernet IP
-const char *topic = "test/topic";
+const char *topic = "project";
 const int mqtt_port = 1883;
 
 WiFiClient espClient;
