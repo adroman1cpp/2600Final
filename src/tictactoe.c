@@ -16,32 +16,25 @@
 char grid[ROWS][COLUMNS];
 
 //function that makes the grid
-void gameGrid()
-{
+void gameGrid(){
     int i, j;
-    for (i = 0; i < ROWS; i++)
-    {
-        for (j = 0; j < COLUMNS; j++)
-        {
+    for (i = 0; i < ROWS; i++){
+        for (j = 0; j < COLUMNS; j++){
             grid[i][j] = ' ';
         }
     }
 }
 
 //function that prints the grid out
-void printGrid()
-{
+void printGrid(){
     int i, j;
     printf("\n");
-    for (i = 0; i < ROWS; i++)
-    {
-        for (j = 0; j < COLUMNS; j++)
-        {
+    for (i = 0; i < ROWS; i++){
+        for (j = 0; j < COLUMNS; j++){
             printf(" %c |", grid[i][j]);
         }
         printf("\n");
-        for (j = 0; j < COLUMNS; j++)
-        {
+        for (j = 0; j < COLUMNS; j++){
             printf("---");
         }
         printf("\n");
@@ -49,52 +42,41 @@ void printGrid()
 }
 
 //function that checks to see if a player has won
-bool checkWin(char player)
-{
+bool checkWin(char player){
     // check rows
     int i, j;
-    for (i = 0; i < ROWS; i++)
-    {
+    for (i = 0; i < ROWS; i++){
         bool win = true;
-        for (j = 0; j < COLUMNS; j++)
-        {
-            if (grid[i][j] != player)
-            {
+        for (j = 0; j < COLUMNS; j++){
+            if (grid[i][j] != player){
                 win = false;
                 break;
             }
         }
-        if (win)
-        {
+        if (win){
             return true;
         }
     }
 
     // check columns
-    for (j = 0; j < COLUMNS; j++)
-    {
+    for (j = 0; j < COLUMNS; j++){
         bool win = true;
-        for (i = 0; i < ROWS; i++)
-        {
-            if (grid[i][j] != player)
-            {
+        for (i = 0; i < ROWS; i++){
+            if (grid[i][j] != player){
                 win = false;
                 break;
             }
         }
-        if (win)
-        {
+        if (win){
             return true;
         }
     }
 
     // check diagonals
-    if (grid[0][0] == player && grid[1][1] == player && grid[2][2] == player)
-    {
+    if (grid[0][0] == player && grid[1][1] == player && grid[2][2] == player){
         return true;
     }
-    if (grid[0][2] == player && grid[1][1] == player && grid[2][0] == player)
-    {
+    if (grid[0][2] == player && grid[1][1] == player && grid[2][0] == player){
         return true;
     }
 
@@ -102,15 +84,11 @@ bool checkWin(char player)
 }
 
 //checks for draw
-bool checkDraw()
-{
+bool checkDraw(){
     int i, j;
-    for (i = 0; i < ROWS; i++)
-    {
-        for (j = 0; j < COLUMNS; j++)
-        {
-            if (grid[i][j] == ' ')
-            {
+    for (i = 0; i < ROWS; i++){
+        for (j = 0; j < COLUMNS; j++){
+            if (grid[i][j] == ' '){
                 return false;
             }
         }
@@ -119,57 +97,48 @@ bool checkDraw()
 }
 
 //function for the player to choose their input
-void makeMove(int row, int column, char player)
-{
-    if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS)
-    {
+void playerMove(int row, int column, char player){
+    if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS){
         printf("Invalid move. Please try again.\n");
         return;
     }
-    if (grid[row][column] != ' ')
-    {
+    if (grid[row][column] != ' '){
         printf("That cell is already occupied. Please try again.\n");
         return;
     }
 
     grid[row][column] = player;
     printGrid();
-    if (checkWin(player))
-    {
+    if (checkWin(player)){
         printf("Player %c wins!\n", player);
         exit(0);
     }
-    if (checkDraw())
-    {
+    if (checkDraw()){
         printf("It's a draw!\n");
         exit(0);
     }
 }
 
 //function that connects to mqtt
-void on_connect(struct mosquitto *mosq, void *obj, int result)
-{
+void on_connect(struct mosquitto *mosq, void *obj, int result){
     printf("Connected to MQTT server.\n");
 }
 
 //function that disconnects to mqtt
-void on_disconnect(struct mosquitto *mosq, void *obj, int result)
-{
+void on_disconnect(struct mosquitto *mosq, void *obj, int result){
     printf("Disconnected from MQTT server.\n");
 }
 
 //function that receives the message
-void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
-{
+void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message){
     char *payload = message->payload;
     int row = payload[0] - '0';
     int column = payload[1] - '0';
-    makeMove(row, column, 'O');
+    playerMove(row, column, 'O');
 }
 
 //function main where the game is played
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
     gameGrid();
     printGrid();
 
@@ -185,11 +154,10 @@ int main(int argc, char *argv[])
     char player = 'X';
 
     //whule loop that gets input
-    while (true)
-    {
+    while (true){
         printf("Player %c's turn. Enter row and column: ", player);
         scanf("%d %d", &row, &column);
-        makeMove(row, column, player);
+        playerMove(row, column, player);
         player = (player == 'X') ? 'O' : 'X';
 
         char move[2];
