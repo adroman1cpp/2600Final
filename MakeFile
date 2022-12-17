@@ -1,0 +1,14 @@
+CC = gcc
+CFLAGS = -g -Wall -I/C:\Program Files (x86)\mosquitto/include
+LDFLAGS = -L/C:\Program Files (x86)\mosquittolib -lmqtt
+
+all: tic-tac-toe
+
+tic-tac-toe: tic-tac-toe.o
+    $(CC) -o $@ $^ $(LDFLAGS)
+
+tic-tac-toe.o: tic-tac-toe.c
+    $(CC) $(CFLAGS) -c -o $@ $<
+
+clean:
+    rm -f *.o tic-tac-toe
