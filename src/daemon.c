@@ -10,13 +10,13 @@ int main()
     signal(SIGINT, SIG_IGN);
     signal(SIGTERM, SIG_IGN);
 
-    reciever();
+    receiver();
 
     return 0;
 }
 
 
-void reciever()
+void receiver()
 {
     while (1)
     {
